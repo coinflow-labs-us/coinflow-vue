@@ -34,6 +34,7 @@ watchEffect(() => {
     css: css(),
     debug: args.debug,
     origins: args.origins,
+    fontFamily: args.font,
   });
 }, {});
 </script>

@@ -10,9 +10,9 @@ import MobileWalletButtonTest from "./testing/MobileWalletButtonTest.vue";
 <!--  <CoinflowPurchaseProtection/>-->
 <!--  <WithdrawTest/>-->
 <!--  <PurchaseTest/>-->
-<!--  <CardFormTest/>-->
+  <CardFormTest/>
 <!--  <SavedCardFormTest/>-->
-  <MobileWalletButtonTest/>
+<!--  <MobileWalletButtonTest/>-->
 </template>
 
 <style scoped>

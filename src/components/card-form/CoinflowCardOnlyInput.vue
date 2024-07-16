@@ -31,6 +31,7 @@ watchEffect(() => {
     ...args,
     origins: args.origins ?? [],
     css: css(),
+    fontFamily: args.font,
   });
 }, {});
 </script>

@@ -33,7 +33,8 @@ watchEffect(() => {
   initializeTokenExIframe({
     css: css(),
     debug: args.debug,
-    origins: args.origins
+    origins: args.origins,
+    fontFamily: args.font,
   });
 }, {});
 </script>

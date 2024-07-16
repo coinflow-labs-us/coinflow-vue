@@ -29,12 +29,16 @@ function sdkUrl() {
 }
 
 watchEffect((onCleanup) => {
-  if (!partnerId) return;
+  if (!partnerId.value) return;
+
+  const sdkScriptTag = document.createElement('script');
+  sdkScriptTag.src = sdkUrl();
+  document.head.appendChild(sdkScriptTag);
 
   const initializeScript = `window.nSureAsyncInit = function(deviceId) {
               window.nSureSDK.init({
                 appId: '${applicationId()}',
-                partnerId: '${partnerId}',
+                partnerId: '${partnerId.value}',
               });
             };`;
 
@@ -42,9 +46,6 @@ watchEffect((onCleanup) => {
   initializeScriptTag.innerHTML = initializeScript;
   document.head.appendChild(initializeScriptTag);
 
-  const sdkScriptTag = document.createElement('script');
-  sdkScriptTag.src = sdkUrl();
-  document.head.appendChild(sdkScriptTag);
   onCleanup(() => {
     document.head.removeChild(sdkScriptTag);
     document.head.removeChild(initializeScriptTag);

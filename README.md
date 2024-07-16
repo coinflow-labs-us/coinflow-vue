@@ -47,6 +47,14 @@ Props:
 
 # Changelog
 
+# 0.2.4
+
+- Added placeholder CSS to card form elements
+
+# 0.2.3 
+
+- Custom fonts for card elements
+
 ## 1.0.0
 
 - Initial Version of the SDK

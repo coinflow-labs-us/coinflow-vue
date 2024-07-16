@@ -16,6 +16,7 @@ const token = ref<string | null>(null);
         token: '411111YJM5TX1111',
         cardType: CardType.VISA,
         env: 'staging',
+        font: 'Calligraffitti',
         debug: true,
         css: {
           base: 'font-family: Montserrat, sans-serif;padding: 0 8px;border: 0px;margin: 0;width: 100%;font-size: 13px;line-height: 48px;height: 48px;box-sizing: border-box;-moz-box-sizing: border-box;',
