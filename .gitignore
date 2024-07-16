@@ -1,3 +1,4 @@
-/src/lib
+build
 dist
-*.tgz
+node_modules
+.angular
