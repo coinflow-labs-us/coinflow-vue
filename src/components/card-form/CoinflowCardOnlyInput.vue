@@ -1,17 +1,22 @@
 <script setup lang="ts">
-
-import { PropType, watchEffect } from "vue";
-import { CoinflowCardTokenResponse, CoinflowCvvOnlyInputProps, TokenExCvvContainerID } from "../../lib/common";
-import useCardformIframe from "./useCardformIframe";
+import {PropType, watchEffect} from 'vue';
+import {
+  CoinflowCardTokenResponse,
+  CoinflowCvvOnlyInputProps,
+  TokenExCvvContainerID,
+} from '../../lib/common';
+import useCardformIframe from './useCardformIframe';
 
 const {args} = defineProps({
   args: {
     type: Object as PropType<CoinflowCvvOnlyInputProps>,
-    required: true
-  }
+    required: true,
+  },
 });
 
-const {initializeCvvOnlyTokenExIframe, tokenExIframe} = useCardformIframe(args.env);
+const {initializeCvvOnlyTokenExIframe, tokenExIframe} = useCardformIframe(
+  args.env
+);
 
 async function getToken(): Promise<CoinflowCardTokenResponse> {
   if (!tokenExIframe.value) throw new Error('Unable to get token');
@@ -31,7 +36,7 @@ watchEffect(() => {
     ...args,
     origins: args.origins ?? [],
     css: css(),
-    fontFamily: args.font,
+    font: args.font,
   });
 }, {});
 </script>
@@ -40,6 +45,4 @@ watchEffect(() => {
   <div :id="TokenExCvvContainerID" />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

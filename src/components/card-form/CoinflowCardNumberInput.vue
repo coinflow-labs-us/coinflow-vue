@@ -2,17 +2,17 @@
 import {
   CoinflowCardNumberInputProps,
   CoinflowCardTokenResponse,
-  TokenExCardNumberIframeId
-} from "../../lib/common";
-import useCardformIframe from "./useCardformIframe";
-import { PropType, watchEffect } from "vue";
+  TokenExCardNumberIframeId,
+} from '../../lib/common';
+import useCardformIframe from './useCardformIframe';
+import {PropType, watchEffect} from 'vue';
 
 const {args} = defineProps({
   args: {
     type: Object as PropType<CoinflowCardNumberInputProps>,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const {initializeTokenExIframe, tokenExIframe} = useCardformIframe(args.env);
 
@@ -34,7 +34,7 @@ watchEffect(() => {
     css: css(),
     debug: args.debug,
     origins: args.origins,
-    fontFamily: args.font,
+    font: args.font,
   });
 }, {});
 </script>

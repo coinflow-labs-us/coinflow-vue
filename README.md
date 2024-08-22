@@ -47,11 +47,15 @@ Props:
 
 # Changelog
 
-# 0.2.4
+## 0.2.5
+
+- Added `getWalletFromEmail` function to `CoinflowUtils`
+
+## 0.2.4
 
 - Added placeholder CSS to card form elements
 
-# 0.2.3 
+## 0.2.3 
 
 - Custom fonts for card elements
 
