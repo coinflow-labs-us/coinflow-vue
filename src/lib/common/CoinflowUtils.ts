@@ -105,6 +105,7 @@ export class CoinflowUtils {
     deviceId,
     jwtToken,
     origins,
+    threeDsChallengePreference,
   }: CoinflowIFrameProps): string {
     const prefix = routePrefix
       ? `/${routePrefix}/${blockchain}`
@@ -222,6 +223,12 @@ export class CoinflowUtils {
       url.searchParams.append(
         'origins',
         LZString.compressToEncodedURIComponent(JSON.stringify(origins))
+      );
+
+    if (threeDsChallengePreference)
+      url.searchParams.append(
+        'threeDsChallengePreference',
+        threeDsChallengePreference
       );
 
     return url.toString();

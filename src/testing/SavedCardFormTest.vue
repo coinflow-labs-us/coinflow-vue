@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, VNodeRef } from "vue";
-import CoinflowCvvOnlyInput from "../components/card-form/CoinflowCardOnlyInput.vue";
-import { CardType } from "../lib/common";
+import {ref, VNodeRef} from 'vue';
+import CoinflowCvvOnlyInput from '../components/card-form/CoinflowCvvOnlyInput.vue';
+import {CardType} from '../lib/common';
 
 const cvvOnlyInput = ref<VNodeRef | undefined>(undefined);
 const token = ref<string | null>(null);
@@ -9,11 +9,19 @@ const token = ref<string | null>(null);
 
 <template>
   <div :style="{width: '100%', height: `100%`}">
-    <button @click="async () => {
-      token = await cvvOnlyInput.getToken();
-    }">Get Token</button>
-    <CoinflowCvvOnlyInput ref="cvvOnlyInput" :args="{
-        token: '411111YJM5TX1111',
+    <button
+      @click="
+        async () => {
+          token = await cvvOnlyInput.getToken();
+        }
+      "
+    >
+      Get Token
+    </button>
+    <CoinflowCvvOnlyInput
+      ref="cvvOnlyInput"
+      :args="{
+        token: '4000057YPB4M5556',
         cardType: CardType.VISA,
         env: 'staging',
         font: 'Calligraffitti',
@@ -29,7 +37,7 @@ const token = ref<string | null>(null);
             error:
               'box-shadow: 0 0 6px 0 rgba(224, 57, 57, 0.5);border: 1px solid rgba(224, 57, 57, 0.5);',
           },
-        }
+        },
       }"
     />
     <span>Token: {{ token }}</span>

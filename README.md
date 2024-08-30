@@ -47,6 +47,10 @@ Props:
 
 # Changelog
 
+## 0.2.6
+
+- Fixed `CoinflowCvvOnlyInput` issues
+
 ## 0.2.5
 
 - Added `getWalletFromEmail` function to `CoinflowUtils`
