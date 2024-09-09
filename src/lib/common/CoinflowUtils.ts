@@ -299,6 +299,22 @@ export class CoinflowUtils {
     }
   }
 
+  static async getWalletFromUserId({
+    userId,
+    merchantId,
+    env,
+  }: {
+    userId: string;
+    merchantId: string;
+    env: CoinflowEnvs;
+  }): Promise<SolanaWallet> {
+    return this.getWalletFromEmail({
+      email: userId,
+      merchantId,
+      env,
+    });
+  }
+
   static async getWalletFromEmail({
     email,
     merchantId,

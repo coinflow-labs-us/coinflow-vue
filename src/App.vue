@@ -4,6 +4,7 @@ import PurchaseTest from './testing/PurchaseTest.vue';
 import CardFormTest from './testing/CardFormTest.vue';
 import SavedCardFormTest from './testing/SavedCardFormTest.vue';
 import MobileWalletButtonTest from './testing/MobileWalletButtonTest.vue';
+import YouPay from './testing/YouPay.vue';
 </script>
 
 <template>
@@ -12,7 +13,8 @@ import MobileWalletButtonTest from './testing/MobileWalletButtonTest.vue';
   <!--  <PurchaseTest/>-->
   <!--  <CardFormTest/>-->
   <!--  <SavedCardFormTest />-->
-  <MobileWalletButtonTest />
+  <!--  <MobileWalletButtonTest />-->
+  <YouPay />
 </template>
 
 <style scoped>
