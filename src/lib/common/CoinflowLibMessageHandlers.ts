@@ -99,6 +99,7 @@ export function getHandlers(
     eth: () => getEvmWalletHandlers(props),
     polygon: () => getEvmWalletHandlers(props),
     base: () => getEvmWalletHandlers(props),
+    arbitrum: () => getEvmWalletHandlers(props),
   })();
 }
 

@@ -5,8 +5,8 @@ import {
   doInitializeTokenExIframe,
   setTokenExScriptTag,
   TokenExIframe,
+  CoinflowEnvs,
 } from '../../lib/common';
-import {CoinflowEnvs} from '../../lib/common';
 
 const useCardFormIframe = (env: CoinflowEnvs) => {
   const loaded = ref(false);

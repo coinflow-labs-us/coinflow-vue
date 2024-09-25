@@ -13,8 +13,8 @@ import YouPay from './testing/YouPay.vue';
   <!--  <PurchaseTest/>-->
   <!--  <CardFormTest/>-->
   <!--  <SavedCardFormTest />-->
-  <!--  <MobileWalletButtonTest />-->
-  <YouPay />
+  <MobileWalletButtonTest />
+  <!--  <YouPay />-->
 </template>
 
 <style scoped>

@@ -45,7 +45,13 @@ export interface CustomerInfo {
 }
 
 /** Coinflow Types **/
-export type CoinflowBlockchain = 'solana' | 'near' | 'eth' | 'polygon' | 'base';
+export type CoinflowBlockchain =
+  | 'solana'
+  | 'near'
+  | 'eth'
+  | 'polygon'
+  | 'base'
+  | 'arbitrum';
 export type CoinflowEnvs =
   | 'prod'
   | 'staging'
@@ -152,12 +158,17 @@ export interface CoinflowBaseHistoryProps extends CoinflowEvmHistoryProps {
   blockchain: 'base';
 }
 
+export interface CoinflowArbitrumHistoryProps extends CoinflowEvmHistoryProps {
+  blockchain: 'arbitrum';
+}
+
 export type CoinflowHistoryProps =
   | CoinflowSolanaHistoryProps
   | CoinflowNearHistoryProps
   | CoinflowPolygonHistoryProps
   | CoinflowEthHistoryProps
-  | CoinflowBaseHistoryProps;
+  | CoinflowBaseHistoryProps
+  | CoinflowArbitrumHistoryProps;
 
 /** Transactions **/
 
@@ -290,12 +301,18 @@ export interface CoinflowBasePurchaseProps extends CoinflowEvmPurchaseProps {
   blockchain: 'base';
 }
 
+export interface CoinflowArbitrumPurchaseProps
+  extends CoinflowEvmPurchaseProps {
+  blockchain: 'arbitrum';
+}
+
 export type CoinflowPurchaseProps =
   | CoinflowSolanaPurchaseProps
   | CoinflowNearPurchaseProps
   | CoinflowPolygonPurchaseProps
   | CoinflowEthPurchaseProps
-  | CoinflowBasePurchaseProps;
+  | CoinflowBasePurchaseProps
+  | CoinflowArbitrumPurchaseProps;
 
 /** Withdraw **/
 
@@ -308,7 +325,7 @@ export interface CoinflowCommonWithdrawProps extends CoinflowTypes {
   bankAccountLinkRedirect?: string;
   additionalWallets?: {
     wallet: string;
-    blockchain: 'solana' | 'eth' | 'near' | 'polygon';
+    blockchain: 'solana' | 'eth' | 'near' | 'polygon' | 'base' | 'arbitrum';
   }[];
   lockAmount?: boolean;
   transactionSigner?: string;
@@ -353,12 +370,18 @@ export interface CoinflowBaseWithdrawProps extends CoinflowEvmWithdrawProps {
   blockchain: 'base';
 }
 
+export interface CoinflowArbitrumWithdrawProps
+  extends CoinflowEvmWithdrawProps {
+  blockchain: 'arbitrum';
+}
+
 export type CoinflowWithdrawProps =
   | CoinflowSolanaWithdrawProps
   | CoinflowNearWithdrawProps
   | CoinflowEthWithdrawProps
   | CoinflowPolygonWithdrawProps
-  | CoinflowBaseWithdrawProps;
+  | CoinflowBaseWithdrawProps
+  | CoinflowArbitrumWithdrawProps;
 
 export interface CommonEvmRedeem {
   waitForHash?: boolean;

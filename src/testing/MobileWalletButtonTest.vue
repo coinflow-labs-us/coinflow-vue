@@ -6,6 +6,7 @@ import {
   CoinflowSolanaPurchaseProps,
 } from '../lib/common';
 import {Connection, Keypair} from '@solana/web3.js';
+import {ref} from 'vue';
 
 const wallet: CoinflowSolanaPurchaseProps['wallet'] = {
   publicKey: Keypair.generate().publicKey,
@@ -17,6 +18,11 @@ const wallet: CoinflowSolanaPurchaseProps['wallet'] = {
   },
 } as CoinflowSolanaPurchaseProps['wallet'];
 
+const height = ref(40);
+const handleHeightChange = (newHeight: string) => {
+  height.value = Number(newHeight);
+};
+
 const args: CoinflowPurchaseProps & {color: 'white' | 'black'} = {
   env: 'local',
   merchantId: 'paysafe',
@@ -27,10 +33,11 @@ const args: CoinflowPurchaseProps & {color: 'white' | 'black'} = {
   wallet,
   connection: new Connection('https://api.devnet.solana.com'),
   blockchain: 'solana',
-  color: 'white',
+  color: 'black',
   theme: {
-    background: '#00141D',
+    background: '#c9d1d3',
   },
+  handleHeightChange,
 };
 </script>
 
@@ -39,15 +46,25 @@ const args: CoinflowPurchaseProps & {color: 'white' | 'black'} = {
     style="
       height: 100vh;
       width: 90vw;
-      background-color: #00141d;
+      background-color: #c9d1d3;
       padding-left: 40px;
       padding-right: 40px;
     "
   >
-    <div style="height: 40px; padding-bottom: 40px; padding-top: 40px">
+    <div style="height: 40px"></div>
+    <div
+      :style="{
+        height: '40px',
+        borderRadius: '12px',
+        overflow: 'hidden',
+      }"
+    >
       <coinflow-google-pay-button v-if="args" :args="args" />
     </div>
-    <div style="height: 40px">
+    <div style="height: 40px"></div>
+    <div
+      :style="{height: `${height}px`, borderRadius: '12px', overflow: 'hidden'}"
+    >
       <coinflow-apple-pay-button v-if="args" :args="args" />
     </div>
   </div>

@@ -47,6 +47,10 @@ Props:
 
 # Changelog
 
+## 0.2.7
+
+- Added overlay to digital wallet buttons to make the loading time 0
+
 ## 0.2.6
 
 - Fixed `CoinflowCvvOnlyInput` issues

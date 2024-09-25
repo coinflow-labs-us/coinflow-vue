@@ -1,19 +1,33 @@
 <script setup lang="ts">
-import { PropType, ref } from "vue";
-import { CoinflowPurchaseProps, getHandlers, getWalletPubkey } from "../../lib/common";
-import CoinflowIFrame from "../CoinflowIframe.vue";
+import {PropType, ref} from 'vue';
+import {
+  CoinflowPurchaseProps,
+  getHandlers,
+  getWalletPubkey,
+} from '../../lib/common';
+import CoinflowIFrame from '../CoinflowIframe.vue';
 
-const {args, route} = defineProps({
+const {args, route, overlayDisplayOverride} = defineProps({
   args: {
-    type: Object as PropType<CoinflowPurchaseProps & {
-      color: "white" | "black"
-    }>,
-    required: true
+    type: Object as PropType<
+      CoinflowPurchaseProps & {
+        color: 'white' | 'black';
+      }
+    >,
+    required: true,
   },
   route: {
     type: String,
     required: true,
-  }
+  },
+  overlayDisplayOverride: {
+    type: String,
+    required: false,
+  },
+  alignItems: {
+    type: String,
+    required: false,
+  },
 });
 
 const {onSuccess} = args;
@@ -31,12 +45,24 @@ function iframeProps() {
 function messageHandlers() {
   return {
     ...getHandlers(args),
-    handleHeightChange: args.handleHeightChange
+    handleHeightChange: args.handleHeightChange,
   };
 }
+
+const opacity = ref(0.8);
+const display = ref('flex');
+
 function handleMessage({data}: {data: string}) {
   try {
     const res = JSON.parse(data);
+
+    if ('method' in res && res.method === 'loaded') {
+      opacity.value = 1;
+      setTimeout(() => {
+        display.value = 'none';
+      }, 2000);
+    }
+
     if (!('method' in res) || res.method !== 'getToken') {
       return;
     }
@@ -49,5 +75,42 @@ function handleMessage({data}: {data: string}) {
 </script>
 
 <template>
-  <coinflow-i-frame @onMessage="handleMessage" :args="{...iframeProps(), ...messageHandlers()}"/>
+  <div
+    :style="{
+      position: 'relative',
+      height: '100%',
+    }"
+  >
+    <div
+      :style="{
+        backgroundColor: args.color,
+        display: overlayDisplayOverride ?? display,
+        opacity,
+        alignItems,
+        width: '100%',
+        height: '40px',
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 20,
+        justifyContent: 'center',
+        pointerEvents: 'none',
+      }"
+    >
+      <slot></slot>
+    </div>
+    <div
+      :style="{
+        position: 'relative',
+        zIndex: 10,
+        height: '100%',
+      }"
+    >
+      <coinflow-i-frame
+        @onMessage="handleMessage"
+        :args="{...iframeProps(), ...messageHandlers()}"
+      />
+    </div>
+  </div>
 </template>
