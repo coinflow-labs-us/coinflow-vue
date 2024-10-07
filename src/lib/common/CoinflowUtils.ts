@@ -106,6 +106,7 @@ export class CoinflowUtils {
     jwtToken,
     origins,
     threeDsChallengePreference,
+    supportEmail,
   }: CoinflowIFrameProps): string {
     const prefix = routePrefix
       ? `/${routePrefix}/${blockchain}`
@@ -144,6 +145,7 @@ export class CoinflowUtils {
     if (email) {
       url.searchParams.append('email', email);
     }
+    if (supportEmail) url.searchParams.append('supportEmail', supportEmail);
 
     if (token) {
       url.searchParams.append('token', token.toString());

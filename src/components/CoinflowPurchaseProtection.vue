@@ -2,7 +2,7 @@
 import { onMounted, PropType, ref, watchEffect } from "vue";
 import { CoinflowEnvs, CoinflowUtils } from "../lib/common";
 
-const {args: {env, merchantId}} = defineProps({
+const {args} = defineProps({
   args: {
     type: Object as PropType<{
       env: CoinflowEnvs;
@@ -14,16 +14,16 @@ const {args: {env, merchantId}} = defineProps({
 
 const partnerId = ref<string | undefined>(undefined);
 
-onMounted(() => new CoinflowUtils(env)
-  .getNSurePartnerId(merchantId)
+onMounted(() => new CoinflowUtils(args.env)
+  .getNSurePartnerId(args.merchantId)
   .then(pId => (partnerId.value = pId)));
 
 function applicationId() {
-  return env === 'prod' ? '9JBW2RHC7JNJN8ZQ' : 'SANDBOX_CTCE4XK53ZW0R7V1';
+  return args.env === 'prod' ? '9JBW2RHC7JNJN8ZQ' : 'SANDBOX_CTCE4XK53ZW0R7V1';
 }
 
 function sdkUrl() {
-  return env === 'prod'
+  return args.env === 'prod'
     ? 'https://sdk.nsureapi.com/sdk.js'
     : 'https://sdk.nsureapi.com/sdk-sandbox.js';
 }

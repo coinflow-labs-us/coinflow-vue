@@ -252,6 +252,10 @@ export interface CoinflowCommonPurchaseProps extends CoinflowTypes {
   deviceId?: string;
   jwtToken?: string;
   /**
+   * Your company email address that the customer can contact.
+   */
+  supportEmail?: string;
+  /**
    * If rendering the Coinflow component within multiple nested iframes, all ancestors in the chain must be provided as a comma-separated list.
    *
    * Example:
@@ -447,6 +451,7 @@ export interface CoinflowIFrameProps
       | 'jwtToken'
       | 'origins'
       | 'threeDsChallengePreference'
+      | 'supportEmail'
     >,
     Pick<
       CoinflowCommonWithdrawProps,

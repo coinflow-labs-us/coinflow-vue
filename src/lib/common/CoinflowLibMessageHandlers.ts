@@ -33,6 +33,7 @@ enum IFrameMessageMethods {
   SendTransaction = 'sendTransaction',
   HeightChange = 'heightChange',
   Success = 'success',
+  Load = 'load',
 }
 
 export function getWalletPubkey({

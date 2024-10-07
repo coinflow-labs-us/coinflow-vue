@@ -23,7 +23,7 @@ export default defineComponent({
       return {
         ...this.args,
         walletPubkey,
-        route: `/purchase/${this.args.merchantId}`,
+        route: `/purchase-v2/${this.args.merchantId}`,
         transaction: CoinflowUtils.getTransaction(this.args),
       };
     },
