@@ -23,7 +23,7 @@ const handleHeightChange = (newHeight: string) => {
   height.value = Number(newHeight);
 };
 
-const args: CoinflowPurchaseProps & {color: 'white' | 'black'} = {
+const args: CoinflowPurchaseProps & {color: 'white' | 'black'; onError?: (message: string) => void;} = {
   env: 'local',
   merchantId: 'paysafe',
   amount: 1,
@@ -38,6 +38,9 @@ const args: CoinflowPurchaseProps & {color: 'white' | 'black'} = {
     background: '#c9d1d3',
   },
   handleHeightChange,
+  onError: (error: string) => {
+    console.log('VUE MobileWalletButton onError: ', error);
+  },
 };
 </script>
 

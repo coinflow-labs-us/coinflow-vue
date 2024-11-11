@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import {PropType} from 'vue';
 import {CoinflowPurchaseProps} from '../../lib/common';
-import MobileWalletButton from './MobileWalletButton.vue';
+import MobileWalletButton, { CoinflowMobileWalletProps } from "./MobileWalletButton.vue";
 import GooglePayOverlay from './GooglePayOverlay.vue';
 
 const {args} = defineProps({
   args: {
-    type: Object as PropType<
-      CoinflowPurchaseProps & {color: 'white' | 'black'}
-    >,
+    type: Object as PropType<CoinflowMobileWalletProps>,
     required: true,
   },
 });

@@ -7,13 +7,14 @@ import {
 } from '../../lib/common';
 import CoinflowIFrame from '../CoinflowIframe.vue';
 
+export type CoinflowMobileWalletProps = CoinflowPurchaseProps & {
+  color: 'white' | 'black';
+  onError?: (error: string) => void;
+};
+
 const {args, route, overlayDisplayOverride} = defineProps({
   args: {
-    type: Object as PropType<
-      CoinflowPurchaseProps & {
-        color: 'white' | 'black';
-      }
-    >,
+    type: Object as PropType<CoinflowMobileWalletProps>,
     required: true,
   },
   route: {
@@ -61,6 +62,11 @@ function handleMessage({data}: {data: string}) {
       setTimeout(() => {
         display.value = 'none';
       }, 2000);
+    }
+
+    if ('method' in res && res.data.startsWith('ERROR')) {
+      args?.onError?.(res.info);
+      return false;
     }
 
     if (!('method' in res) || res.method !== 'getToken') {

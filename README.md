@@ -47,6 +47,22 @@ Props:
 
 # Changelog
 
+## 0.3.1
+
+- Added sessionKey authentication mechanism to `CoinflowWithdraw`
+
+## 0.3.1
+
+- Allow higher versions of Vue as a peer dependency
+
+## 0.3.0
+
+- Added sessionKey authentication mechanism to `CoinflowPurchase`
+
+## 0.2.8
+
+- Added `onError` callback to Apple Pay and Google Pay buttons
+
 ## 0.2.7
 
 - Added overlay to digital wallet buttons to make the loading time 0

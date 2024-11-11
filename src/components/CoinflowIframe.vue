@@ -16,8 +16,7 @@ export default defineComponent({
     }
   },
   emits: {
-    onMessage({data, origin}: {data: string; origin: string}) {
-      console.log({data, origin});
+    onMessage(_data: {data: string; origin: string}) {
       return true;
     }
   },
