@@ -259,6 +259,12 @@ export interface CoinflowCommonPurchaseProps extends CoinflowTypes {
   customerInfo?: CustomerInfo;
   settlementType?: SettlementType;
   authOnly?: boolean;
+  /**
+   * The DeviceID gotten from the Coinflow SDK:
+   *  https://docs.coinflow.cash/docs/implement-chargeback-protection#how-to-add-chargeback-protection
+   *
+   * window?.nSureSDK?.getDeviceId()
+   */
   deviceId?: string;
   jwtToken?: string;
   /**
