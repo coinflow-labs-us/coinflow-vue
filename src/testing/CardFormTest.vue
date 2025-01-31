@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, VNodeRef } from "vue";
-import CoinflowCardNumberInput from "../components/card-form/CoinflowCardNumberInput.vue";
-import CoinflowCvvInput from "../components/card-form/CoinflowCvvInput.vue";
-import { CoinflowPurchaseProtection } from "../index";
+import {ref, VNodeRef} from 'vue';
+import CoinflowCardNumberInput from '../components/card-form/CoinflowCardNumberInput.vue';
+import CoinflowCvvInput from '../components/card-form/CoinflowCvvInput.vue';
+import {CoinflowPurchaseProtection} from '../index';
 
 declare const window: any;
 
@@ -13,12 +13,21 @@ const deviceId = ref<string | null>(null);
 
 <template>
   <div :style="{width: '100%', height: `100%`}">
-    <CoinflowPurchaseProtection :args="{env: 'staging', merchantId: 'paysafe'}"/>
-    <button @click="async () => {
-      token = await cardNumberInput.getToken();
-    }">Get Token</button>
-    <CoinflowCardNumberInput ref="cardNumberInput" :args="{
-        env: 'staging',
+    <CoinflowPurchaseProtection :args="{env: 'local', merchantId: 'paysafe'}" />
+    <button
+      @click="
+        async () => {
+          token = await cardNumberInput.getToken();
+        }
+      "
+    >
+      Get Token
+    </button>
+    <CoinflowCardNumberInput
+      ref="cardNumberInput"
+      :args="{
+        merchantId: 'paysafe',
+        env: 'local',
         debug: true,
         font: 'Calligraffitti',
         css: {
@@ -32,14 +41,21 @@ const deviceId = ref<string | null>(null);
             error:
               'box-shadow: 0 0 6px 0 rgba(224, 57, 57, 0.5);border: 1px solid rgba(224, 57, 57, 0.5);',
           },
-        }
+        },
+        origins: [window.location.origin],
       }"
     />
-    <CoinflowCvvInput/>
+    <CoinflowCvvInput />
     <span>Token: {{ token }}</span>
-    <button @click="async () => {
-      deviceId = window.nSureSDK.getDeviceId();
-    }">Get Device ID</button>
+    <button
+      @click="
+        async () => {
+          deviceId = window.nSureSDK.getDeviceId();
+        }
+      "
+    >
+      Get Device ID
+    </button>
     <span>Device ID: {{ deviceId }}</span>
   </div>
 </template>

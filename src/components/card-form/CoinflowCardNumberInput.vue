@@ -3,18 +3,21 @@ import {
   CoinflowCardNumberInputProps,
   CoinflowCardTokenResponse,
   TokenExCardNumberIframeId,
+  MerchantIdOrCheckoutJwt,
 } from '../../lib/common';
 import useCardformIframe from './useCardformIframe';
 import {PropType, watchEffect} from 'vue';
 
 const {args} = defineProps({
   args: {
-    type: Object as PropType<CoinflowCardNumberInputProps>,
+    type: Object as PropType<
+      CoinflowCardNumberInputProps & MerchantIdOrCheckoutJwt
+    >,
     required: true,
   },
 });
 
-const {initializeTokenExIframe, tokenExIframe} = useCardformIframe(args.env);
+const {initializeTokenExIframe, tokenExIframe} = useCardformIframe(args);
 
 async function getToken(): Promise<CoinflowCardTokenResponse> {
   if (!tokenExIframe.value) throw new Error('Unable to get token');

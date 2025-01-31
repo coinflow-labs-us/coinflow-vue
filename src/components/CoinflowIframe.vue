@@ -83,7 +83,7 @@ export default defineComponent({
   <iframe
     style="height: 100%; width: 100%;"
     ref="iframeRef"
-    allow="payment;camera"
+    allow="payment;camera;clipboard-write"
     title="withdraw"
     frameBorder="0"
     :src="url"

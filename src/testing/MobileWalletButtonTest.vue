@@ -23,10 +23,13 @@ const handleHeightChange = (newHeight: string) => {
   height.value = Number(newHeight);
 };
 
-const args: CoinflowPurchaseProps & {color: 'white' | 'black'; onError?: (message: string) => void;} = {
+const args: CoinflowPurchaseProps & {
+  color: 'white' | 'black';
+  onError?: (message: string) => void;
+} = {
   env: 'local',
   merchantId: 'paysafe',
-  amount: 1,
+  subtotal: {cents: 100},
   onSuccess: (...args) => {
     console.log(...args);
   },

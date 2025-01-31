@@ -8,11 +8,11 @@ import MobileWalletButtonTest from './testing/MobileWalletButtonTest.vue';
 
 <template>
   <!--  <CoinflowPurchaseProtection/>-->
-  <!--  <WithdrawTest/>-->
-  <!--  <PurchaseTest/>-->
-  <!--  <CardFormTest/>-->
-  <!--  <SavedCardFormTest />-->
-  <MobileWalletButtonTest />
+  <!--    <WithdrawTest/>-->
+  <!--  <PurchaseTest />-->
+  <!--  <CardFormTest />-->
+  <SavedCardFormTest />
+  <!--  <MobileWalletButtonTest />-->
   <!--  <YouPay />-->
 </template>
 

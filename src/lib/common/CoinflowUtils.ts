@@ -3,10 +3,12 @@ import {
   CoinflowEnvs,
   CoinflowIFrameProps,
   CoinflowPurchaseProps,
+  CustomerInfo,
 } from './CoinflowTypes';
 import {web3, base58} from './SolanaPeerDeps';
 import LZString from 'lz-string';
 import type {Transaction, VersionedTransaction} from '@solana/web3.js';
+import {Currency} from './Subtotal';
 
 export class CoinflowUtils {
   env: CoinflowEnvs;
@@ -54,7 +56,7 @@ export class CoinflowUtils {
     route,
     routePrefix,
     env,
-    amount,
+    subtotal,
     transaction,
     blockchain = 'solana',
     webhookInfo,
@@ -69,7 +71,6 @@ export class CoinflowUtils {
     color,
     rent,
     lockDefaultToken,
-    token,
     tokens,
     planCode,
     disableApplePay,
@@ -88,6 +89,7 @@ export class CoinflowUtils {
     threeDsChallengePreference,
     supportEmail,
     destinationAuthKey,
+    allowedPaymentMethods,
   }: CoinflowIFrameProps): string {
     const prefix = routePrefix
       ? `/${routePrefix}/${blockchain}`
@@ -100,8 +102,19 @@ export class CoinflowUtils {
     if (transaction) {
       url.searchParams.append('transaction', transaction);
     }
-    if (amount) {
-      url.searchParams.append('amount', amount.toString());
+
+    if (subtotal) {
+      if ('cents' in subtotal) {
+        url.searchParams.append('cents', subtotal.cents.toString());
+        if ('currency' in subtotal) {
+          url.searchParams.append('currency', subtotal.currency.toString());
+        } else {
+          url.searchParams.append('currency', Currency.USD);
+        }
+      } else {
+        url.searchParams.append('token', subtotal.address.toString());
+        url.searchParams.append('amount', subtotal.amount.toString());
+      }
     }
 
     if (webhookInfo) {
@@ -129,10 +142,6 @@ export class CoinflowUtils {
       url.searchParams.append('email', email);
     }
     if (supportEmail) url.searchParams.append('supportEmail', supportEmail);
-
-    if (token) {
-      url.searchParams.append('token', token.toString());
-    }
 
     if (tokens) {
       url.searchParams.append('tokens', tokens.toString());
@@ -208,6 +217,12 @@ export class CoinflowUtils {
       url.searchParams.append(
         'origins',
         LZString.compressToEncodedURIComponent(JSON.stringify(origins))
+      );
+
+    if (allowedPaymentMethods)
+      url.searchParams.append(
+        'allowedPaymentMethods',
+        allowedPaymentMethods.join(',')
       );
 
     if (threeDsChallengePreference)
@@ -310,4 +325,32 @@ export class CoinflowUtils {
         throw new Error('blockchain not supported!');
     }
   }
+}
+
+export interface FullName {
+  firstName: string;
+  lastName: string;
+}
+
+export function getCustomerName(
+  info: CustomerInfo | undefined
+): FullName | undefined {
+  if (!info) return undefined;
+
+  let firstName: string | undefined, lastName: string | undefined;
+  if ('name' in info && info.name) {
+    firstName = info.name.split(' ')[0];
+    lastName = info.name.split(' ').slice(1).join(' ');
+  }
+
+  if ('firstName' in info && info.firstName) firstName = info.firstName;
+
+  if ('lastName' in info && info.lastName) lastName = info.lastName;
+
+  if (firstName && lastName)
+    return {
+      firstName,
+      lastName,
+    };
+  return undefined;
 }

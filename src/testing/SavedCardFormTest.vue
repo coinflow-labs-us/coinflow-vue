@@ -5,6 +5,7 @@ import {CardType} from '../lib/common';
 
 const cvvOnlyInput = ref<VNodeRef | undefined>(undefined);
 const token = ref<string | null>(null);
+const origins = [window.location.origin];
 </script>
 
 <template>
@@ -21,9 +22,10 @@ const token = ref<string | null>(null);
     <CoinflowCvvOnlyInput
       ref="cvvOnlyInput"
       :args="{
+        merchantId: 'paysafe',
         token: '4000057YPB4M5556',
         cardType: CardType.VISA,
-        env: 'staging',
+        env: 'local',
         font: 'Calligraffitti',
         debug: true,
         css: {
@@ -38,6 +40,7 @@ const token = ref<string | null>(null);
               'box-shadow: 0 0 6px 0 rgba(224, 57, 57, 0.5);border: 1px solid rgba(224, 57, 57, 0.5);',
           },
         },
+        origins,
       }"
     />
     <span>Token: {{ token }}</span>

@@ -6,9 +6,12 @@ import {
   setTokenExScriptTag,
   TokenExIframe,
   CoinflowEnvs,
+  MerchantIdOrCheckoutJwt,
 } from '../../lib/common';
 
-const useCardFormIframe = (env: CoinflowEnvs) => {
+const useCardFormIframe = (
+  props: {env: CoinflowEnvs} & MerchantIdOrCheckoutJwt
+) => {
   const loaded = ref(false);
   const tokenExScriptLoaded = ref(false);
   const tokenExIframe = ref<TokenExIframe | undefined>(undefined);
@@ -16,7 +19,7 @@ const useCardFormIframe = (env: CoinflowEnvs) => {
 
   onMounted(() => {
     setTokenExScriptTag({
-      env,
+      env: props.env,
       setTokenExScriptLoaded: () => {
         console.log('tokenExScriptLoaded.value = true');
         tokenExScriptLoaded.value = true;
@@ -37,9 +40,9 @@ const useCardFormIframe = (env: CoinflowEnvs) => {
     >
   ) => {
     const iframe = await doInitializeCvvOnlyTokenExIframe({
+      ...props,
       ...args,
       tokenExScriptLoaded: tokenExScriptLoaded.value,
-      env,
       setCachedToken,
       setLoaded,
     });
@@ -54,9 +57,9 @@ const useCardFormIframe = (env: CoinflowEnvs) => {
     >
   ) => {
     const iframe = await doInitializeTokenExIframe({
+      ...props,
       ...args,
       tokenExScriptLoaded: tokenExScriptLoaded.value,
-      env,
       setCachedToken,
       setLoaded,
     });
@@ -71,9 +74,9 @@ const useCardFormIframe = (env: CoinflowEnvs) => {
     >
   ) => {
     const iframe = await doInitializeTokenExCardOnlyIframe({
+      ...props,
       ...args,
       tokenExScriptLoaded: tokenExScriptLoaded.value,
-      env,
       setCachedToken,
       setLoaded,
     });
