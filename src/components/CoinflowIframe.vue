@@ -1,45 +1,57 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { CoinflowIFrameProps, CoinflowUtils, handleIFrameMessage, IFrameMessageHandlers } from "../lib/common";
+import {defineComponent, PropType} from 'vue';
+import {
+  CoinflowIFrameProps,
+  CoinflowUtils,
+  handleIFrameMessage,
+  IFrameMessageHandlers,
+} from '../lib/common';
 
 export default defineComponent({
-  name: "CoinflowIFrame",
+  name: 'CoinflowIFrame',
   props: {
     args: {
       type: Object as PropType<CoinflowIFrameProps & IFrameMessageHandlers>,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     url() {
       return CoinflowUtils.getCoinflowUrl(this.args);
-    }
+    },
   },
   emits: {
     onMessage(_data: {data: string; origin: string}) {
       return true;
-    }
+    },
   },
   methods: {
-    sendMessage (message: string) {
-      const ref: HTMLIFrameElement | null = this.$refs.iframeRef as HTMLIFrameElement | null;
+    sendMessage(message: string) {
+      const ref: HTMLIFrameElement | null = this.$refs
+        .iframeRef as HTMLIFrameElement | null;
       if (!ref?.contentWindow) throw new Error('Iframe not defined');
       ref.contentWindow.postMessage(message, '*');
     },
-    handleIframeMessages ({data, origin}: {data: string; origin: string}) {
+    handleIframeMessages({data, origin}: {data: string; origin: string}) {
       if (!origin.includes(CoinflowUtils.getCoinflowBaseUrl(this.args.env)))
         return;
 
       this.$emit('onMessage', {data, origin});
 
-      const promise = handleIFrameMessage(data, this.args);
+      const promise = handleIFrameMessage(
+        data,
+        this.args,
+        this.args.handleHeightChangeId
+      );
       if (!promise) return;
       promise.then(this.sendMessage).catch(e => {
         console.error(e);
-        this.sendMessage("ERROR " + e.message);
+        this.sendMessage('ERROR ' + e.message);
       });
     },
-    async listenForMessage(isResponseValid: (response: string) => boolean): Promise<string> {
+    async listenForMessage(
+      isResponseValid: (response: string) => boolean
+    ): Promise<string> {
       let handler: ({data, origin}: {data: string; origin: string}) => void;
       return new Promise<string>((resolve, reject) => {
         handler = ({data, origin}: {data: string; origin: string}) => {
@@ -81,19 +93,21 @@ export default defineComponent({
 
 <template>
   <iframe
-    style="height: 100%; width: 100%;"
+    style="height: 100%; width: 100%"
     ref="iframeRef"
     allow="payment;camera;clipboard-write"
     title="withdraw"
     frameBorder="0"
     :src="url"
     :scrolling="args.handleHeightChange ? 'no' : 'yes'"
-    @load="() => {
-      const ref: HTMLIFrameElement | null = $refs.iframeRef as HTMLIFrameElement | null;
-      if (ref) ref.style.opacity = '1'
-    }"
+    @load="
+      () => {
+        const ref: HTMLIFrameElement | null =
+          $refs.iframeRef as HTMLIFrameElement | null;
+        if (ref) ref.style.opacity = '1';
+      }
+    "
   />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

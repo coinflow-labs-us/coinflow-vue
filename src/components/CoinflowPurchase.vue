@@ -1,23 +1,26 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import {defineComponent, PropType} from 'vue';
 import {
   CoinflowPurchaseProps,
   getWalletPubkey,
   getHandlers,
-  CoinflowUtils
-} from "../lib/common";
-import CoinflowIFrame from "./CoinflowIframe.vue";
+  CoinflowUtils,
+} from '../lib/common';
+import CoinflowIFrame from './CoinflowIframe.vue';
 
 export default defineComponent({
-  name: "CoinflowPurchase",
-  components: { CoinflowIFrame },
+  name: 'CoinflowPurchase',
+  components: {CoinflowIFrame},
   props: {
     args: {
       type: Object as PropType<CoinflowPurchaseProps>,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
+    handleHeightChangeId() {
+      return Math.random().toString(16).substring(2);
+    },
     iframeProps() {
       const walletPubkey = getWalletPubkey(this.args);
       return {
@@ -30,17 +33,17 @@ export default defineComponent({
     messageHandlers() {
       return {
         ...getHandlers(this.args),
-        handleHeightChange: this.args.handleHeightChange
+        handleHeightChange: this.args.handleHeightChange,
       };
-    }
+    },
   },
 });
 </script>
 
 <template>
-  <coinflow-i-frame :args="{...iframeProps, ...messageHandlers}"/>
+  <coinflow-i-frame
+    :args="{...iframeProps, ...messageHandlers, handleHeightChangeId}"
+  />
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

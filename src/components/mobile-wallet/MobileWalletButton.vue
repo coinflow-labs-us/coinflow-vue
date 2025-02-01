@@ -52,6 +52,7 @@ function messageHandlers() {
 
 const opacity = ref(0.8);
 const display = ref('flex');
+const handleHeightChangeId = Math.random().toString(16).substring(2);
 
 function handleMessage({data}: {data: string}) {
   try {
@@ -115,7 +116,7 @@ function handleMessage({data}: {data: string}) {
     >
       <coinflow-i-frame
         @onMessage="handleMessage"
-        :args="{...iframeProps(), ...messageHandlers()}"
+        :args="{...iframeProps(), ...messageHandlers(), handleHeightChangeId}"
       />
     </div>
   </div>

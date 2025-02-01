@@ -18,9 +18,16 @@ const wallet: CoinflowSolanaPurchaseProps['wallet'] = {
   },
 } as CoinflowSolanaPurchaseProps['wallet'];
 
-const height = ref(40);
-const handleHeightChange = (newHeight: string) => {
-  height.value = Number(newHeight);
+const googleHeight = ref(40);
+const handleGoogleHeightChange = (newHeight: string) => {
+  if (Number(newHeight) < 40) return;
+  googleHeight.value = Number(newHeight);
+};
+
+const appleHeight = ref(40);
+const handleAppleHeightChange = (newHeight: string) => {
+  if (Number(newHeight) < 40) return;
+  appleHeight.value = Number(newHeight);
 };
 
 const args: CoinflowPurchaseProps & {
@@ -29,7 +36,7 @@ const args: CoinflowPurchaseProps & {
 } = {
   env: 'local',
   merchantId: 'paysafe',
-  subtotal: {cents: 100},
+  subtotal: {cents: 198},
   onSuccess: (...args) => {
     console.log(...args);
   },
@@ -40,7 +47,6 @@ const args: CoinflowPurchaseProps & {
   theme: {
     background: '#c9d1d3',
   },
-  handleHeightChange,
   onError: (error: string) => {
     console.log('VUE MobileWalletButton onError: ', error);
   },
@@ -49,29 +55,30 @@ const args: CoinflowPurchaseProps & {
 
 <template>
   <div
-    style="
-      height: 100vh;
-      width: 90vw;
-      background-color: #c9d1d3;
-      padding-left: 40px;
-      padding-right: 40px;
-    "
+    :style="{
+      height: `${googleHeight}px`,
+      borderRadius: '12px',
+      overflow: 'hidden',
+    }"
   >
-    <div style="height: 40px"></div>
-    <div
-      :style="{
-        height: '40px',
-        borderRadius: '12px',
-        overflow: 'hidden',
+    <coinflow-google-pay-button
+      v-if="args"
+      :args="{...args, handleHeightChange: handleGoogleHeightChange}"
+    />
+  </div>
+  <div
+    :style="{
+      height: `${appleHeight}px`,
+      borderRadius: '12px',
+      overflow: 'hidden',
+    }"
+  >
+    <coinflow-apple-pay-button
+      v-if="args"
+      :args="{
+        ...args,
+        handleHeightChange: handleAppleHeightChange,
       }"
-    >
-      <coinflow-google-pay-button v-if="args" :args="args" />
-    </div>
-    <div style="height: 40px"></div>
-    <div
-      :style="{height: `${height}px`, borderRadius: '12px', overflow: 'hidden'}"
-    >
-      <coinflow-apple-pay-button v-if="args" :args="args" />
-    </div>
+    />
   </div>
 </template>
