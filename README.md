@@ -47,6 +47,10 @@ Props:
 
 # Changelog
 
+## 1.0.4
+
+- Added `seller` prop to `chargebackProtectionData`
+
 ## 1.0.3
 
 - Added 3DS Challenge Handling to the standalone Google Pay button
