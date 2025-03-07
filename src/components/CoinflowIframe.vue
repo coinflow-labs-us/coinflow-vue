@@ -93,6 +93,7 @@ export default defineComponent({
 
 <template>
   <iframe
+    credentialless
     style="height: 100%; width: 100%"
     ref="iframeRef"
     allow="payment;camera;clipboard-write"
