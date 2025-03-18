@@ -47,8 +47,12 @@ Props:
 
 # Changelog
 
+## 1.0.7
+
+- Improving Withdraw With Session Keys
+
 ## 1.0.6
-- 
+ 
 - Add credentialless to iframe
 
 ## 1.0.5
