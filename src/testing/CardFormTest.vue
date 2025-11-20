@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {ref, VNodeRef} from 'vue';
+import { ref, VNodeRef } from 'vue';
 import CoinflowCardNumberInput from '../components/card-form/CoinflowCardNumberInput.vue';
 import CoinflowCvvInput from '../components/card-form/CoinflowCvvInput.vue';
-import {CoinflowPurchaseProtection} from '../index';
+import nsureSDK from '@nsure-ai/web-client-sdk';
+import CoinflowPurchaseProtection from '../components/CoinflowPurchaseProtection.vue';
 
 declare const window: any;
 
@@ -13,7 +14,7 @@ const deviceId = ref<string | null>(null);
 
 <template>
   <div :style="{width: '100%', height: `100%`}">
-    <CoinflowPurchaseProtection :args="{env: 'local', merchantId: 'paysafe'}" />
+    <CoinflowPurchaseProtection :args="{env: 'local', merchantId: 'paysafe'}"/>
     <button
       @click="
         async () => {
@@ -50,7 +51,7 @@ const deviceId = ref<string | null>(null);
     <button
       @click="
         async () => {
-          deviceId = window.nSureSDK.getDeviceId();
+          deviceId = nsureSDK.getDeviceId();
         }
       "
     >

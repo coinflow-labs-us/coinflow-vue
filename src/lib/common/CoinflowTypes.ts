@@ -11,6 +11,25 @@ import {nftCartItem} from './types/nftCartItem';
 import {CryptoCartItem} from './types/cryptoCartItem';
 import {MoneyTopUpCartItem} from './types/moneyTopUpCartItem';
 
+export enum WithdrawCategory {
+  USER = 'user',
+  BUSINESS = 'business',
+}
+
+export enum WithdrawSpeed {
+  ASAP = 'asap',
+  SAME_DAY = 'same_day',
+  STANDARD = 'standard',
+  CARD = 'card',
+  IBAN = 'iban',
+  PIX = 'pix',
+  EFT = 'eft',
+  VENMO = 'venmo',
+  PAYPAL = 'paypal',
+  WIRE = 'wire',
+  INTERAC = 'interac',
+}
+
 export enum SettlementType {
   Credits = 'Credits',
   USDC = 'USDC',
@@ -51,6 +70,7 @@ interface BaseCustomerInfo {
    * Date of birth in YYYY-MM-DD format
    */
   dob?: string;
+  email?: string;
 }
 
 export interface NameCustomerInfo extends BaseCustomerInfo {
@@ -249,7 +269,24 @@ export enum PaymentMethods {
   applePay = 'applePay',
   credits = 'credits',
   crypto = 'crypto',
+  instantBankTransfer = 'instantBankTransfer',
+  wire = 'wire',
 }
+
+export const paymentMethodLabels: Record<PaymentMethods, string> = {
+  [PaymentMethods.card]: 'Card',
+  [PaymentMethods.ach]: 'ACH',
+  [PaymentMethods.fasterPayments]: 'Faster Payments',
+  [PaymentMethods.sepa]: 'SEPA',
+  [PaymentMethods.pix]: 'PIX',
+  [PaymentMethods.usdc]: 'USDC',
+  [PaymentMethods.googlePay]: 'Google Pay',
+  [PaymentMethods.applePay]: 'Apple Pay',
+  [PaymentMethods.credits]: 'Credits',
+  [PaymentMethods.crypto]: 'Crypto',
+  [PaymentMethods.instantBankTransfer]: 'Instant Bank Transfer',
+  [PaymentMethods.wire]: 'Wire Transfer',
+};
 
 export interface CoinflowCommonPurchaseProps extends CoinflowTypes {
   subtotal?: Subtotal;
@@ -270,10 +307,15 @@ export interface CoinflowCommonPurchaseProps extends CoinflowTypes {
   settlementType?: SettlementType;
   authOnly?: boolean;
   /**
+   * If true, pre-checks the partial USDC payment checkbox when USDC balance is available.
+   * If false or undefined, maintains default behavior (unchecked).
+   */
+  partialUsdcChecked?: boolean;
+  /**
    * The DeviceID gotten from the Coinflow SDK:
    *  https://docs.coinflow.cash/docs/implement-chargeback-protection#how-to-add-chargeback-protection
    *
-   * window?.nSureSDK?.getDeviceId()
+   * nSureSDK.getDeviceId()
    */
   deviceId?: string;
   jwtToken?: string;
@@ -292,6 +334,18 @@ export interface CoinflowCommonPurchaseProps extends CoinflowTypes {
   origins?: string[];
   threeDsChallengePreference?: ThreeDsChallengePreference;
   destinationAuthKey?: string;
+  accountFundingTransaction?: AccountFundingTransaction;
+}
+
+/**
+ * Used for Account Funding Transactions
+ */
+export interface AccountFundingTransaction {
+  /**
+   * Recipient information for Account Funding Transactions (AFT).
+   * Required when AFT is enabled and type requires it.
+   */
+  recipientAftInfo?: RecipientAftInfo;
 }
 
 export interface CoinflowSolanaPurchaseProps
@@ -304,6 +358,7 @@ export interface CoinflowSolanaPurchaseProps
   blockchain: 'solana';
   rent?: {lamports: string | number};
   nativeSolToConvert?: {lamports: string | number};
+  redemptionCheck?: boolean;
 }
 
 export interface CoinflowSessionKeyPurchaseProps
@@ -371,6 +426,10 @@ export interface CoinflowCommonWithdrawProps extends CoinflowTypes {
    * If the withdrawer is authenticated with a sessionKey pass it here.
    */
   sessionKey?: string;
+  /**
+   * Array of allowed withdrawal speeds. If not provided, all speeds are allowed.
+   */
+  allowedWithdrawSpeeds?: WithdrawSpeed[];
 }
 
 export type WalletTypes = SolanaWallet | EthWallet;
@@ -435,27 +494,65 @@ export interface CommonEvmRedeem {
   waitForHash?: boolean;
 }
 
+/**
+ * (EVM only) If your contract sends the item/service being purchased via a custom "receiver" field, then utilize this object.
+ *
+ * The coinflow contract calls the "to" contract, which transfers the NFT/item to the "receiver" address defined in the contract function arguments.
+ */
 export interface NormalRedeem extends CommonEvmRedeem {
-  transaction: {to: string; data: string};
+  /**
+   * Transaction to be called.
+   */
+  transaction: {
+    /**
+     * The merchant's whitelisted contract
+     */
+    to: string;
+    /**
+     * The data to call this contract with, HEX encoded.
+     *
+     * The coinflow contract calls the "to" contract, contract pulls USDC from msg.sender, and transfers the NFT/item to the "receiver" address defined in the contract function arguments.
+     */
+    data: string;
+  };
 }
 
+/**
+ * (EVM only) If your know the ID of the NFT being purchased, then utilize this object.
+ *
+ * The contract transfers the NFT to msg.sender (which is the Coinflow contract), the Coinflow contract fwd's the NFT to the end user's wallet.
+ */
 export interface KnownTokenIdRedeem extends NormalRedeem {
   /**
-   * @minLength 42 Please provide a valid EVM Public Key (42 Characters Long)
-   * @maxLength 42 Please provide a valid EVM Public Key (42 Characters Long)
+   * The address of the Nft's Contract
+   *
+   * @minLength 42 Please provide a valid EVM Address (42 Characters Long)
+   * @maxLength 42 Please provide a valid EVM Address (42 Characters Long)
    */
   nftContract: string;
   /**
+   * The ID of the NFT being purchased. Will be forwarded by the Coinflow contract to the customer's wallet.
+   *
    * @minLength 1 Please provide a valid Nft Id
    */
   nftId: string;
 }
 
+/**
+ * (EVM only) If your contract mints an NFT via a OpenZeppelin Safe Mint Call, then utilize this object.
+ *
+ * The contract mints the NFT to msg.sender (which is the Coinflow contract), the Coinflow contract picks up the SafeMint event, and fwd's the NFT to the end user's wallet.
+ */
 export interface SafeMintRedeem extends NormalRedeem {
   type: 'safeMint';
   nftContract?: string;
 }
 
+/**
+ * (EVM only) If your contract returns the NFT ID, then utilize this object.
+ *
+ * The contract mints the NFT to msg.sender (which is the Coinflow contract), the Coinflow contract picks up the returned NFT ID, and fwd's the NFT to the end user's wallet.
+ */
 export interface ReturnedTokenIdRedeem extends NormalRedeem {
   type: 'returned';
   nftContract?: string;
@@ -485,14 +582,14 @@ export interface ReservoirRedeem extends CommonEvmRedeem {
   taker?: string;
 }
 
-/** @deprecated */
 export interface TokenRedeem extends CommonEvmRedeem {
-  /** @deprecated */
   type: 'token';
-  /** @deprecated */
   destination: string;
 }
 
+/**
+ * If your contract exists on a chain supported by Decent, pass this object in order to call it.
+ */
 export interface DecentRedeem extends CommonEvmRedeem {
   type: 'decent';
   /**
@@ -526,6 +623,11 @@ export interface DecentRedeem extends CommonEvmRedeem {
   };
 }
 
+/**
+ * (EVM only) if you want to execute an EVM transaction on a successful purchase, you can pass a transaction request here.
+ *
+ * Gas fees for the transaction will be automatically calculated and added to the total charged to the customer. Optionally the merchant can opt to pay for these gas fees.
+ */
 export type EvmTransactionData =
   | SafeMintRedeem
   | ReturnedTokenIdRedeem
@@ -553,6 +655,8 @@ export interface CoinflowIFrameProps
       | 'threeDsChallengePreference'
       | 'supportEmail'
       | 'allowedPaymentMethods'
+      | 'accountFundingTransaction'
+      | 'partialUsdcChecked'
     >,
     Pick<
       CoinflowCommonWithdrawProps,
@@ -562,11 +666,12 @@ export interface CoinflowIFrameProps
       | 'lockAmount'
       | 'lockDefaultToken'
       | 'origins'
+      | 'allowedWithdrawSpeeds'
     >,
     Pick<CoinflowEvmPurchaseProps, 'authOnly'>,
     Pick<
       CoinflowSolanaPurchaseProps,
-      'rent' | 'nativeSolToConvert' | 'destinationAuthKey'
+      'rent' | 'nativeSolToConvert' | 'destinationAuthKey' | 'redemptionCheck'
     > {
   walletPubkey: string | null | undefined;
   sessionKey?: string;
@@ -588,4 +693,46 @@ export enum CardType {
   MASTERCARD = 'MSTR',
   AMEX = 'AMEX',
   DISCOVER = 'DISC',
+}
+
+export interface RecipientAftInfo {
+  /**
+   * @minLength 2
+   */
+  firstName: string;
+  /**
+   * @minLength 2
+   */
+  lastName: string;
+  /**
+   * @minLength 2
+   */
+  address1: string;
+  /**
+   * @minLength 2
+   */
+  city: string;
+  /**
+   * @minLength 2
+   */
+  postalCode: string;
+  /**
+   * @minLength 2
+   */
+  state?: string;
+  /**
+   * @minLength 2
+   * @maxLength 2
+   */
+  countryCode: string;
+  /**
+   * Recipients Date Of Birth in YYYMMDD format.
+   * @pattern ^\d{8}$
+   */
+  dateOfBirth?: string;
+  /**
+   * @pattern ^\d+$
+   */
+  phoneNumber?: string;
+  documentReference?: string;
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, PropType, ref, watchEffect } from "vue";
 import { CoinflowEnvs, CoinflowUtils } from "../lib/common";
+import nsureSDK from "@nsure-ai/web-client-sdk";
 
 const {args} = defineProps({
   args: {
@@ -22,34 +23,10 @@ function applicationId() {
   return args.env === 'prod' ? '9JBW2RHC7JNJN8ZQ' : 'SANDBOX_CTCE4XK53ZW0R7V1';
 }
 
-function sdkUrl() {
-  return args.env === 'prod'
-    ? 'https://sdk.nsureapi.com/sdk.js'
-    : 'https://sdk.nsureapi.com/sdk-sandbox.js';
-}
 
 watchEffect((onCleanup) => {
   if (!partnerId.value) return;
-
-  const sdkScriptTag = document.createElement('script');
-  sdkScriptTag.src = sdkUrl();
-  document.head.appendChild(sdkScriptTag);
-
-  const initializeScript = `window.nSureAsyncInit = function(deviceId) {
-              window.nSureSDK.init({
-                appId: '${applicationId()}',
-                partnerId: '${partnerId.value}',
-              });
-            };`;
-
-  const initializeScriptTag = document.createElement('script');
-  initializeScriptTag.innerHTML = initializeScript;
-  document.head.appendChild(initializeScriptTag);
-
-  onCleanup(() => {
-    document.head.removeChild(sdkScriptTag);
-    document.head.removeChild(initializeScriptTag);
-  });
+  nsureSDK.init(applicationId(), partnerId.value)
 });
 
 </script>

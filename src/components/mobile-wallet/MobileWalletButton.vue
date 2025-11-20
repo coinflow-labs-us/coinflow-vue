@@ -60,9 +60,7 @@ function handleMessage({data}: {data: string}) {
 
     if ('method' in res && res.method === 'loaded') {
       opacity.value = 1;
-      setTimeout(() => {
-        display.value = 'none';
-      }, 2000);
+      display.value = 'none';
     }
 
     if ('method' in res && res.data.startsWith('ERROR')) {
