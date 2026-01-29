@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, VNodeRef } from 'vue';
+import {ref, VNodeRef} from 'vue';
 import CoinflowCardNumberInput from '../components/card-form/CoinflowCardNumberInput.vue';
 import CoinflowCvvInput from '../components/card-form/CoinflowCvvInput.vue';
 import nsureSDK from '@nsure-ai/web-client-sdk';
@@ -14,7 +14,7 @@ const deviceId = ref<string | null>(null);
 
 <template>
   <div :style="{width: '100%', height: `100%`}">
-    <CoinflowPurchaseProtection :args="{env: 'local', merchantId: 'paysafe'}"/>
+    <CoinflowPurchaseProtection :args="{env: 'local', merchantId: 'paysafe'}" />
     <button
       @click="
         async () => {
@@ -30,14 +30,14 @@ const deviceId = ref<string | null>(null);
         merchantId: 'paysafe',
         env: 'local',
         debug: true,
-        font: 'Calligraffitti',
+        font: 'Red Hat Display',
         css: {
-          base: 'font-family: Montserrat, sans-serif;padding: 0 8px;border: 0px;margin: 0;width: 100%;font-size: 13px;line-height: 48px;height: 48px;box-sizing: border-box;-moz-box-sizing: border-box;',
+          base: 'font-family: \'Red Hat Display\', sans-serif;padding: 0 8px;border: 0px;margin: 0;width: 100%;font-size: 13px;line-height: 48px;height: 48px;box-sizing: border-box;-moz-box-sizing: border-box;',
           focus: 'outline: 0;',
           error:
             'box-shadow: 0 0 6px 0 rgba(224, 57, 57, 0.5);border: 1px solid rgba(224, 57, 57, 0.5);',
           cvv: {
-            base: 'font-family: Montserrat, sans-serif;padding: 0 8px;border: 0px;margin: 0;width: 100%;font-size: 13px;line-height: 48px;height: 48px;box-sizing: border-box;-moz-box-sizing: border-box;',
+            base: 'font-family: \'Red Hat Display\', sans-serif;padding: 0 8px;border: 0px;margin: 0;width: 100%;font-size: 13px;line-height: 48px;height: 48px;box-sizing: border-box;-moz-box-sizing: border-box;',
             focus: 'outline: 0;',
             error:
               'box-shadow: 0 0 6px 0 rgba(224, 57, 57, 0.5);border: 1px solid rgba(224, 57, 57, 0.5);',

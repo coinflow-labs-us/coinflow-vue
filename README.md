@@ -44,8 +44,21 @@ Props:
 * `rent` (optional, Solana only): Specify the blockchain rent amount to add to the total
 * `nativeSolToConvert` (optional, Solana only): Specify the amount of native SOL to convert wSOL for the purchase
 * `jwtToken` (optional): A JWT token which encodes verified checkout parameters to prevent spoofing of arguments.
+* `zeroAuthorization` (optional): Pass in true if you wish to perform a zero authorization card transaction
 
 # Changelog
+
+## 1.6.0
+
+- New Blockchain Support: The SDK now supports Monad, a high-performance EVM-compatible blockchain. Pass blockchain='monad' to enable Monad payment processing.
+
+## 1.5.1
+
+- Internal change to a query parameter name for zero authorization
+
+## 1.5.0
+
+- Added zeroAuthorization parameter to allow zero authorization card transactions
 
 ## 1.4.3
 
