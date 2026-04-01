@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, PropType, ref, watchEffect } from "vue";
-import { CoinflowEnvs, CoinflowUtils } from "../lib/common";
-import nsureSDK from "@nsure-ai/web-client-sdk";
+import {onMounted, PropType} from 'vue';
+import {CoinflowEnvs} from '../lib/common';
+import {initCoinflowProtection} from '../lib/common/CoinflowProtectionInit';
 
 const {args} = defineProps({
   args: {
@@ -9,27 +9,13 @@ const {args} = defineProps({
       env: CoinflowEnvs;
       merchantId: string;
     }>,
-    required: true
+    required: true,
   },
 });
 
-const partnerId = ref<string | undefined>(undefined);
-
-onMounted(() => new CoinflowUtils(args.env)
-  .getNSurePartnerId(args.merchantId)
-  .then(pId => (partnerId.value = pId)));
-
-function applicationId() {
-  return args.env === 'prod' ? '9JBW2RHC7JNJN8ZQ' : 'SANDBOX_CTCE4XK53ZW0R7V1';
-}
-
-
-watchEffect((onCleanup) => {
-  if (!partnerId.value) return;
-  nsureSDK.init(applicationId(), partnerId.value)
+onMounted(() => {
+  initCoinflowProtection({coinflowEnv: args.env, merchantId: args.merchantId});
 });
-
 </script>
 
-<template>
-</template>
+<template></template>
