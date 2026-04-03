@@ -1,5 +1,13 @@
 # Coinflow Vue
 
+## Changelog
+
+### 1.12.0
+
+- New `CoinflowCardForm` component — simple card input with a single `tokenize()` call and full theme support
+- Added theme options for `fontSize` and placeholder text
+- Improved security for iframe communication
+
 ## Withdraw
 
 Props:
