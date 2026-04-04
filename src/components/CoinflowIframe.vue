@@ -33,10 +33,8 @@ export default defineComponent({
       ref.contentWindow.postMessage(message, '*');
     },
     handleIframeMessages({data, origin}: {data: string; origin: string}) {
-      const expectedOrigin = new URL(
-        CoinflowUtils.getCoinflowBaseUrl(this.args.env)
-      ).origin;
-      if (origin !== expectedOrigin) return;
+      if (!origin.includes(CoinflowUtils.getCoinflowBaseUrl(this.args.env)))
+        return;
 
       this.$emit('onMessage', {data, origin});
 
@@ -57,10 +55,8 @@ export default defineComponent({
       let handler: ({data, origin}: {data: string; origin: string}) => void;
       return new Promise<string>((resolve, reject) => {
         handler = ({data, origin}: {data: string; origin: string}) => {
-          const expectedOrigin = new URL(
-            CoinflowUtils.getCoinflowBaseUrl(this.args.env)
-          ).origin;
-          if (origin !== expectedOrigin) return;
+          if (!origin.includes(CoinflowUtils.getCoinflowBaseUrl(this.args.env)))
+            return;
 
           if (data.startsWith('ERROR')) {
             reject(new Error(data.replace('ERROR', '')));
