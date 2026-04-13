@@ -1,5 +1,15 @@
 # Coinflow Vue
 
+## Changelog
+
+### 1.12.0
+
+- New `CoinflowCardForm` component with variant support (`card-form`, `card-number-form`, `cvv-form`) — simple card inputs with a single `tokenize()` call and full theme support
+- Theme options: `font`, `fontSize`, `background`, `textColor`, `showCardIcon`, `cardNumberPlaceholder`, `cvvPlaceholder`, `expirationPlaceholder`
+- `showCardIcon`: display the detected card brand (Visa, Mastercard, etc.) inline with the card number input
+- Improved browser autocomplete support for card fields
+- Improved security for iframe communication
+
 ## Withdraw
 
 Props:
