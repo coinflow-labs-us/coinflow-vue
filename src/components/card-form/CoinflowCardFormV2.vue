@@ -8,7 +8,7 @@ import {
   MerchantTheme,
 } from '../../lib/common';
 
-interface CardFormV2TokenResponse {
+export interface CardFormV2TokenResponse {
   token: string;
   expMonth?: string;
   expYear?: string;
