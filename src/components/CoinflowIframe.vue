@@ -100,7 +100,7 @@ export default defineComponent({
     credentialless
     style="height: 100%; width: 100%"
     ref="iframeRef"
-    allow="payment;camera;clipboard-write"
+    allow="payment;camera;clipboard-write;geolocation"
     title="withdraw"
     frameBorder="0"
     :src="url"
