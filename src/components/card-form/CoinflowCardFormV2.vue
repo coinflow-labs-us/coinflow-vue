@@ -30,6 +30,7 @@ const {args} = defineProps({
 
 const iframeRef = ref<HTMLIFrameElement | null>(null);
 const loaded = ref(false);
+const iframeHeight = ref<number | null>(null);
 
 const url = computed(() => {
   const baseUrl = CoinflowUtils.getCoinflowBaseUrl(args.env);
@@ -38,6 +39,7 @@ const url = computed(() => {
     baseUrl
   );
   iframeUrl.searchParams.append('merchantId', args.merchantId);
+  iframeUrl.searchParams.append('useHeightChange', 'true');
   if (args.theme) {
     iframeUrl.searchParams.append(
       'theme',
@@ -59,6 +61,11 @@ function handleMessage({data, origin}: {data: string; origin: string}) {
     if (parsed.method === IFrameMessageMethods.Loaded) {
       loaded.value = true;
       args.onLoad?.();
+    } else if (parsed.method === IFrameMessageMethods.HeightChange) {
+      const parsedHeight = Number(parsed.data);
+      if (Number.isFinite(parsedHeight) && parsedHeight > 0) {
+        iframeHeight.value = parsedHeight;
+      }
     }
   } catch {
     // not JSON
@@ -126,10 +133,10 @@ defineExpose({tokenize});
     allow="payment"
     :style="{
       width: '100%',
-      height: '60px',
+      height: iframeHeight ? `${iframeHeight}px` : '60px',
       border: 'none',
       opacity: loaded ? 1 : 0,
-      transition: 'opacity 300ms linear',
+      transition: 'opacity 300ms linear, height 150ms ease-out',
     }"
   />
 </template>
