@@ -12,6 +12,8 @@ export interface CardFormV2TokenResponse {
   token: string;
   expMonth?: string;
   expYear?: string;
+  /** Forter device token captured in the card-form iframe; forward it as the `x-forter-token` header on your charge request so Forter can score the transaction. Absent if the Forter SDK has not loaded. */
+  forterToken?: string;
 }
 
 const {args} = defineProps({
