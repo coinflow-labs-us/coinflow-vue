@@ -58,6 +58,10 @@ Props:
 
 # Changelog
 
+## 1.18.0
+
+- Added loading states to the `CoinflowCardForm`, `CoinflowCardNumberInput`, `CoinflowCvvOnlyInput` components
+
 ## 1.15.0
 
 - Added `cardBackground` to `MerchantTheme` to control the inner card-entry surface independently of the outer canvas `background`
