@@ -63,7 +63,11 @@ function handleMessage({data}: {data: string}) {
       display.value = 'none';
     }
 
-    if ('method' in res && res.data.startsWith('ERROR')) {
+    if (
+      'method' in res &&
+      typeof res.data === 'string' &&
+      res.data.startsWith('ERROR')
+    ) {
       args?.onError?.(res.info);
       return false;
     }

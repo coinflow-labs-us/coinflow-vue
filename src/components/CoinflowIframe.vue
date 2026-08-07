@@ -32,11 +32,12 @@ export default defineComponent({
       if (!ref?.contentWindow) throw new Error('Iframe not defined');
       ref.contentWindow.postMessage(message, '*');
     },
-    handleIframeMessages({data, origin}: {data: string; origin: string}) {
+    handleIframeMessages({data, origin}: {data: unknown; origin: string}) {
       const expectedOrigin = new URL(
         CoinflowUtils.getCoinflowBaseUrl(this.args.env)
       ).origin;
       if (origin !== expectedOrigin) return;
+      if (typeof data !== 'string') return;
 
       this.$emit('onMessage', {data, origin});
 
@@ -54,13 +55,14 @@ export default defineComponent({
     async listenForMessage(
       isResponseValid: (response: string) => boolean
     ): Promise<string> {
-      let handler: ({data, origin}: {data: string; origin: string}) => void;
+      let handler: ({data, origin}: {data: unknown; origin: string}) => void;
       return new Promise<string>((resolve, reject) => {
-        handler = ({data, origin}: {data: string; origin: string}) => {
+        handler = ({data, origin}: {data: unknown; origin: string}) => {
           const expectedOrigin = new URL(
             CoinflowUtils.getCoinflowBaseUrl(this.args.env)
           ).origin;
           if (origin !== expectedOrigin) return;
+          if (typeof data !== 'string') return;
 
           if (data.startsWith('ERROR')) {
             reject(new Error(data.replace('ERROR', '')));
