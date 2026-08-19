@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {PropType, ref} from 'vue';
+import {PropType, ref, watch} from 'vue';
 import {
   CoinflowPurchaseProps,
   getHandlers,
   getWalletPubkey,
+  IFrameMessageMethods,
 } from '../../lib/common';
 import CoinflowIFrame from '../CoinflowIframe.vue';
 
@@ -33,10 +34,16 @@ const {args, route, overlayDisplayOverride} = defineProps({
 
 const {onSuccess} = args;
 
+// The subtotal is pinned to its initial value in the iframe URL so that
+// amount changes don't change the URL and force a reload. Updates are
+// instead sent to the running iframe via postMessage below.
+const initialSubtotal = args.subtotal;
+
 function iframeProps() {
   const walletPubkey = getWalletPubkey(args);
   return {
     ...args,
+    subtotal: initialSubtotal,
     walletPubkey,
     transaction: undefined,
     routePrefix: 'form',
@@ -54,6 +61,22 @@ const opacity = ref(0.8);
 const display = ref('flex');
 const handleHeightChangeId = Math.random().toString(16).substring(2);
 
+const iframeRef = ref<InstanceType<typeof CoinflowIFrame> | null>(null);
+const loaded = ref(false);
+let lastSentSubtotal = JSON.stringify(initialSubtotal);
+
+watch([loaded, () => args.subtotal], ([isLoaded, subtotal]) => {
+  if (!isLoaded || !subtotal) return;
+
+  const serializedSubtotal = JSON.stringify(subtotal);
+  if (lastSentSubtotal === serializedSubtotal) return;
+
+  lastSentSubtotal = serializedSubtotal;
+  iframeRef.value?.sendMessage(
+    `${IFrameMessageMethods.UpdateSubtotal}:${serializedSubtotal}`
+  );
+});
+
 function handleMessage({data}: {data: string}) {
   try {
     const res = JSON.parse(data);
@@ -61,6 +84,7 @@ function handleMessage({data}: {data: string}) {
     if ('method' in res && res.method === 'loaded') {
       opacity.value = 1;
       display.value = 'none';
+      loaded.value = true;
     }
 
     if (
@@ -117,6 +141,7 @@ function handleMessage({data}: {data: string}) {
       }"
     >
       <coinflow-i-frame
+        ref="iframeRef"
         @onMessage="handleMessage"
         :args="{...iframeProps(), ...messageHandlers(), handleHeightChangeId}"
       />
