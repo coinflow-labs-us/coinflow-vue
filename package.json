@@ -12,11 +12,9 @@
   "exports": {
     ".": {
       "import": "./dist/coinflow-vue.js",
-      "require": "./dist/coinflow-vue.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/coinflow-vue.umd.cjs"
     }
   },
-  "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist src/lib",
     "vue:dev": "vite",
