@@ -3,6 +3,7 @@ import {ref, onMounted, onUnmounted, computed, watch, PropType} from 'vue';
 import LZString from 'lz-string';
 import {
   CardFormVariant,
+  CardType,
   CoinflowEnvs,
   CoinflowUtils,
   guessSkeletonHeightPx,
@@ -23,6 +24,9 @@ export interface CardFormV2TokenResponse {
   expYear?: string;
   /** Forter device token captured in the card-form iframe; forward it as the `x-forter-token` header on your charge request so Forter can score the transaction. Absent if the Forter SDK has not loaded. */
   forterToken?: string;
+  bin?: string;
+  lastFour?: string;
+  cardType?: CardType;
 }
 
 const {args} = defineProps({
